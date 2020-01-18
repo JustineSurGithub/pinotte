@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
+import { GameService } from '../services/game.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class EngineService implements OnDestroy {
 
   private frameId: number = null;
 
-  public constructor(private ngZone: NgZone) {}
+  public constructor(private ngZone: NgZone, private gameService: GameService) {}
 
   public ngOnDestroy() {
     if (this.frameId != null) {
@@ -70,6 +71,12 @@ export class EngineService implements OnDestroy {
       window.addEventListener('resize', () => {
         this.resize();
       });
+
+      document.body.onkeyup = ((e) => {
+        if (e.keyCode === 32) {
+            this.gameService.startGame();
+        }
+      });
     });
   }
 
@@ -92,4 +99,5 @@ export class EngineService implements OnDestroy {
 
     this.renderer.setSize( width, height );
   }
+
 }
