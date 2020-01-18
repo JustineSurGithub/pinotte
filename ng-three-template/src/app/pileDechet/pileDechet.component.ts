@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DechetsService } from '../services/dechets.service';
 
 @Component({
   selector: 'app-pile-dechet',
@@ -10,7 +11,7 @@ export class PileDechetComponent implements OnInit {
   pile: number[] = [];
   top = 0;
 
-  constructor() {
+  constructor(private dechetsService: DechetsService) {
   }
 
 
@@ -23,18 +24,13 @@ export class PileDechetComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.addToPile(1);
-    this.addToPile(2);
-    this.addToPile(3);
-    this.addToPile(4);
-    this.addToPile(5);
-    this.popFromPile();
-    this.popFromPile();
-    this.addToPile(6);
-    this.addToPile(7);
-    console.log(this.popFromPile());
+    this.pile = [1, 2, 3, 4, 5, 6, 7];
+
+    this.dechetsService.dechetAddingTimer.subscribe(() => {
+      console.log('Adding to pile');
+      this.addToPile(this.pile[this.pile.length - 1] + 1);
+      console.log(this.pile);
+    });
   }
-
-
 
 }
