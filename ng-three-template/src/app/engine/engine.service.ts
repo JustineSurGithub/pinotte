@@ -30,12 +30,19 @@ export class EngineService implements OnDestroy {
 
   background() {
     // Set up the main camera
-    this.camera.position.z = 5;
+    //this.camera.position.z = 5;
 
     // Load the background texture
-    const texture = new THREE.TextureLoader().load('poubelle-poly.jpg');
-    var material = new THREE.MeshBasicMaterial({map: texture});
-    material.color.set(0xff0000);
+    //const texture = new THREE.TextureLoader().load('poubelle-poly.jpg');
+    //var material = new THREE.MeshBasicMaterial({map: texture});
+    //let material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+
+    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const loader = new THREE.TextureLoader();
+   
+
+
+    //material.color.set(0xff0000);
     const backgroundMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(2, 2, 0),
         material);
@@ -51,8 +58,8 @@ export class EngineService implements OnDestroy {
 
   createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     // The first step is to get the reference of the canvas element from our HTML document
-    //this.canvas = canvas.nativeElement;
-    this.canvas = document.querySelector('#c');
+    this.canvas = canvas.nativeElement;
+    //this.canvas = document.querySelector('#c');
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -76,7 +83,16 @@ export class EngineService implements OnDestroy {
     this.scene.add(this.light);
 
     const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const loader = new THREE.TextureLoader().load('poubelle-poly.jpg',
+      function(texture) {
+        material = new THREE.MeshBasicMaterial({
+          map: texture
+        });
+    });
+    
+
+    //const material = new THREE.MeshBasicMaterial({ map: texture });
     this.cube = new THREE.Mesh( geometry, material );
     this.scene.add(this.cube);
 
@@ -113,8 +129,13 @@ export class EngineService implements OnDestroy {
 
     //this.cube.rotation.x += 0.01;
     //this.cube.rotation.y += 0.01;
+    
+    
     this.renderer.render(this.backgroundScene, this.backgroundCamera);
+
     this.renderer.render(this.scene, this.camera);
+
+    
   }
 
   resize() {
