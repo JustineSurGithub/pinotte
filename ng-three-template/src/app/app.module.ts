@@ -8,7 +8,7 @@ import { UiSidebarLeftComponent } from './ui/ui-sidebar-left/ui-sidebar-left.com
 import { UiSidebarRightComponent } from './ui/ui-sidebar-right/ui-sidebar-right.component';
 import { UiComponent } from './ui/ui.component';
 
-import { pileDechetComponent } from './pileDechet/pileDechet.component';
+import { PileDechetComponent } from './pileDechet/pileDechet.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,7 @@ import { pileDechetComponent } from './pileDechet/pileDechet.component';
     UiInfobarTopComponent,
     UiSidebarLeftComponent,
     UiSidebarRightComponent,
-    pileDechetComponent
+    PileDechetComponent
   ],
   imports: [
     BrowserModule
