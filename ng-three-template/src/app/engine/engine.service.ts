@@ -9,6 +9,10 @@ export class EngineService implements OnDestroy {
   private renderer: THREE.WebGLRenderer;
   private camera: THREE.PerspectiveCamera;
   private scene: THREE.Scene;
+
+  private backgroundScene: THREE.Scene;
+  private backgroundCamera: THREE.Camera;
+
   private light: THREE.AmbientLight;
 
   private cube: THREE.Mesh;
@@ -23,9 +27,31 @@ export class EngineService implements OnDestroy {
     }
   }
 
+  background() {
+    // Set up the main camera
+    this.camera.position.z = 5;
+
+    // Load the background texture
+    const texture = new THREE.TextureLoader().load('poubelle-poly.jpg');
+    var material = new THREE.MeshBasicMaterial({map: texture});
+    material.color.set(0xff0000);
+    const backgroundMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(2, 2, 0),
+        material);
+
+    
+    // Create your background scene
+    this.backgroundScene = new THREE.Scene();
+    this.backgroundCamera = new THREE.Camera();
+    this.backgroundScene.add(this.backgroundCamera);
+    this.backgroundScene.add(backgroundMesh);
+  }
+
+
   createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     // The first step is to get the reference of the canvas element from our HTML document
-    this.canvas = canvas.nativeElement;
+    //this.canvas = canvas.nativeElement;
+    this.canvas = document.querySelector('#c');
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -78,8 +104,9 @@ export class EngineService implements OnDestroy {
       this.render();
     });
 
-    this.cube.rotation.x += 0.01;
-    this.cube.rotation.y += 0.01;
+    //this.cube.rotation.x += 0.01;
+    //this.cube.rotation.y += 0.01;
+    this.renderer.render(this.backgroundScene, this.backgroundCamera);
     this.renderer.render(this.scene, this.camera);
   }
 
