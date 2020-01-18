@@ -5,21 +5,31 @@ import { DechetsService } from '../services/dechets.service';
   selector: 'app-pile-dechet',
   templateUrl: './pileDechet.html'
 })
-export class pileDechetComponent implements OnInit {
+export class PileDechetComponent implements OnInit {
 
 
-  pile: Number[] = [];
+  pile: number[] = [];
+  top = 0;
 
-  constructor(private dechetService: DechetsService) {
-
+  constructor(private dechetsService: DechetsService) {
   }
 
+
+  addToPile(dechetId: number) {
+    this.pile.push(dechetId);
+  }
+
+   popFromPile(): number {
+    return this.pile.pop();
+  }
 
   ngOnInit() {
     this.pile = [1, 2, 3, 4, 5, 6, 7];
 
-    this.dechetService.dechetAddingTimer.subscribe(() => {
-      this.pile.push(this.pile[this.pile.length-1] + 1);
+    this.dechetsService.dechetAddingTimer.subscribe(() => {
+      console.log('Adding to pile');
+      this.addToPile(this.pile[this.pile.length - 1] + 1);
+      console.log(this.pile);
     });
   }
 

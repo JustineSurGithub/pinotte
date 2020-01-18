@@ -11,6 +11,7 @@ export class DechetsService {
   startDechetStackUpdates(): any {
     window.setInterval(() => {
       this.dechetAddingTimer.next(0);
+      console.log('nananna');
     }, 1000);
   }
 
