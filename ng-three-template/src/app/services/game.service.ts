@@ -12,6 +12,8 @@ export class GameService {
   public pile: BehaviorSubject<Dechet[]>;
   subscriptions: Subscription[] = [];
 
+  public points = 0;
+
   constructor(private dechetsService: DechetsService) {
     this.pile = new BehaviorSubject([DECHETS[0], DECHETS[1], DECHETS[1], DECHETS[2]]);
     const s = this.dechetsService.dechetAddingTimer.subscribe((newDechet: Dechet) => {
