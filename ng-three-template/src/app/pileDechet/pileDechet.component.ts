@@ -8,7 +8,7 @@ import { Dechet, DECHETS } from '../classes/dechet';
   templateUrl: './pileDechet.component.html',
   styleUrls: ['./pileDechet.component.scss']
 })
-export class PileDechetComponent implements OnInit {
+export class PileDechetComponent implements OnInit, OnDestroy {
 
   private readonly MAX_SIZE = 8;
   private pile: Dechet[] = [];
@@ -23,7 +23,7 @@ export class PileDechetComponent implements OnInit {
 
   addToPile(dechet: Dechet) {
     if (this.pile.length > this.MAX_SIZE) {
-      //TODO: update game logic: the game has ended
+      // TODO: update game logic: the game has ended
 
       return;
     }
@@ -39,7 +39,7 @@ export class PileDechetComponent implements OnInit {
     this.pile = [DECHETS[0], DECHETS[1], DECHETS[1], DECHETS[2], DECHETS[1], DECHETS[0], DECHETS[0]];
 
     const s = this.dechetsService.dechetAddingTimer.subscribe(() => {
-      //this.addToPile(this.pile[this.pile.length - 1] + 1);
+      // this.addToPile(this.pile[this.pile.length - 1] + 1);
     });
     this.subscriptions.push(s);
   }

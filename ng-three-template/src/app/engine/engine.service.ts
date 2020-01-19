@@ -88,15 +88,15 @@ export class EngineService implements OnDestroy {
     this.scene.add(this.cube);
 
 
-    //main
-    var spriteMap = new THREE.TextureLoader().load( "/assets/main.png" );
-    var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+    // main
+    const spriteMap = new THREE.TextureLoader().load( '/assets/main.png' );
+    const spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
     this.hand = new THREE.Sprite( spriteMaterial );
     this.hand.position.z = 3;
     this.hand.position.y = 1;
     this.hand.position.x = -1.4;
     this.scene.add( this.hand );
-      
+
   }
 
   animate(): void {
@@ -122,22 +122,22 @@ export class EngineService implements OnDestroy {
             this.gameService.toggleGameState();
         }
         if (e.keyCode === 37) {
-          //left
-          if(this.hand.position.x - 1.15 > -1.5 ) {
+          // left
+          if (this.hand.position.x - 1.15 > -1.5 ) {
             this.hand.translateX(-1.15);
           } else {
             this.hand.position.x = 2.05;
           }
-          
+
         }
         if (e.keyCode === 39) {
-          //right
-          if(this.hand.position.x + 1.15 < 2.10) {
+          // right
+          if (this.hand.position.x + 1.15 < 2.10) {
             this.hand.translateX(1.15);
           } else {
             this.hand.position.x = -1.4;
           }
-          
+
         }
       };
     });
