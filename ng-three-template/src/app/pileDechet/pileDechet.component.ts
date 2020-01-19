@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { DechetsService } from '../services/dechets.service';
 import { Subscription } from 'rxjs';
+import { Dechet, DECHETS } from '../classes/dechet';
 
 @Component({
   selector: 'app-pile-dechet',
@@ -10,7 +11,7 @@ import { Subscription } from 'rxjs';
 export class PileDechetComponent implements OnInit {
 
   private readonly MAX_SIZE = 8;
-  private pile: number[] = [];
+  private pile: Dechet[] = [];
   subscriptions: Subscription[] = [];
 
   constructor(private dechetsService: DechetsService) {
@@ -20,21 +21,22 @@ export class PileDechetComponent implements OnInit {
     return `/assets/${id}.png`;
   }
 
-  addToPile(dechetId: number) {
+  addToPile(dechet: Dechet) {
     if (this.pile.length > this.MAX_SIZE) {
       //TODO: update game logic: the game has ended
 
       return;
     }
-    this.pile = [...this.pile, dechetId];
+    this.pile = [...this.pile, dechet];
   }
 
-   popFromPile(): number {
+   popFromPile(): Dechet {
     return this.pile.pop();
   }
 
   ngOnInit() {
-    this.pile = [0, 8, 8, 18, 27, 8, 0, 0];
+    // this.pile = [0, 8, 8, 18, 27, 8, 0, 0];
+    this.pile = [DECHETS[0], DECHETS[1], DECHETS[1], DECHETS[2], DECHETS[1], DECHETS[0], DECHETS[0]];
 
     const s = this.dechetsService.dechetAddingTimer.subscribe(() => {
       //this.addToPile(this.pile[this.pile.length - 1] + 1);
