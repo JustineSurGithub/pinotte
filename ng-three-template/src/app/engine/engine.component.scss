@@ -2,6 +2,10 @@ body {
   margin: 0;
 }
 
+.engine-wrapper {
+    z-index: -1;
+}
+
 #c {
   width: 100vw;
   height: 100vh;
