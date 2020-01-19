@@ -15,6 +15,8 @@ export class EngineService implements OnDestroy {
   private hand: THREE.Sprite;
   private dechetSprite: THREE.Sprite;
 
+  private spriteDechetMaterial: THREE.SpriteMaterial;
+
   private fallingSprites: THREE.Sprite[] = [];
 
   private frameId: number = null;
@@ -99,8 +101,8 @@ export class EngineService implements OnDestroy {
     const spriteDechetMap = new THREE.TextureLoader().load( `/assets/${dechetId}.png` );
     console.log(dechetId);
     //const spriteDechetMap = new THREE.TextureLoader().load( `/assets/0.png` );
-    const spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
-    this.dechetSprite = new THREE.Sprite( spriteDechetMaterial );
+    this.spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
+    this.dechetSprite = new THREE.Sprite( this.spriteDechetMaterial );
     this.dechetSprite.scale.x = 0.5;
     this.dechetSprite.scale.y = 0.5;
     this.dechetSprite.position.z = 3;
@@ -139,8 +141,16 @@ export class EngineService implements OnDestroy {
           //TODO
 
           //get next item from pile
-          //TODO
-
+          const dechetId = this.gameService.seekPile();
+          const spriteDechetMap = new THREE.TextureLoader().load( `/assets/${dechetId}.png` );
+          this.spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
+          this.dechetSprite = new THREE.Sprite( this.spriteDechetMaterial );
+          this.dechetSprite.scale.x = 0.5;
+          this.dechetSprite.scale.y = 0.5;
+          this.dechetSprite.position.z = 3;
+          this.dechetSprite.position.y = 0.46;
+          this.dechetSprite.position.x = this.hand.position.x;
+          this.scene.add( this.dechetSprite );
         }
         if (e.key === 'ArrowLeft') {
           // left
