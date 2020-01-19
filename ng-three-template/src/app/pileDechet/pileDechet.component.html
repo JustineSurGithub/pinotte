@@ -1,6 +1,6 @@
 <h2>Pile de déchets</h2>
 <h5>Prochain déchet à trier:</h5>
-<li *ngFor="let dechet of pile.slice().reverse(), index as i">
+<li *ngFor="let dechet of pile, index as i">
     <div *ngIf="i===0"><img src="{{idToUrlImage(dechet.id)}}" height="80" width="80" style = "border-style:dotted"></div>
     <div *ngIf="i!=0"><img src="{{idToUrlImage(dechet.id)}}" height="80" width="80" style = "border-style:solid"></div>
     <br>

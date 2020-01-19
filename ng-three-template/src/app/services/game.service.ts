@@ -1,24 +1,34 @@
 import { Injectable } from '@angular/core';
 import { DechetsService } from './dechets.service';
+import { Dechet, DECHETS } from '../classes/dechet';
+import { Subscription, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
+  private readonly MAX_SIZE = 8;
+  public pile: BehaviorSubject<Dechet[]>;
+  subscriptions: Subscription[] = [];
 
-  constructor(private dechetService: DechetsService) {
-   }
+  constructor(private dechetsService: DechetsService) {
+    this.pile = new BehaviorSubject([DECHETS[0], DECHETS[1], DECHETS[1], DECHETS[2]]);
+    const s = this.dechetsService.dechetAddingTimer.subscribe((newDechet: Dechet) => {
+      this.addToPile(newDechet);
+    });
+    this.subscriptions.push(s);
+  }
 
   gameInProgress = false;
   startGame() {
     // this.gameInProgress = true;
-    this.dechetService.startDechetStackUpdates();
+    this.dechetsService.startDechetStackUpdates();
     console.log('Game starting');
   }
 
   stopGame(): any {
     console.log('Game stopping');
-    this.dechetService.stopDechetStackUpdates();
+    this.dechetsService.stopDechetStackUpdates();
   }
 
   toggleGameState(): void {
@@ -26,4 +36,23 @@ export class GameService {
     this.gameInProgress = !this.gameInProgress;
   }
 
+  addToPile(dechet: Dechet) {
+    if (this.pile.value.length > this.MAX_SIZE) {
+      // TODO: update game logic: the game has ended
+      return;
+    }
+    this.pile.next([...this.pile.value, dechet]);
+  }
+
+   popFromPile(): Dechet {
+    // TODO: remove hack
+    const withoutFirst = Array.from(this.pile.value);
+    const elem = withoutFirst.shift();
+    this.pile.next(withoutFirst);
+    return elem;
+  }
+
+  private cancelSubscriptions(): void {
+    this.subscriptions.forEach(s => s.unsubscribe());
+  }
 }
