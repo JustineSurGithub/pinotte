@@ -29,6 +29,22 @@ export class EngineService implements OnDestroy {
   private dechetInHandSprite: THREE.Sprite;
   private ignoreUpdate = false;
 
+  private selectedBin = 0;
+
+  private binSelectLeft() {
+    this.selectedBin -= 1;
+    if (this.selectedBin === -1) {
+      this.selectedBin = 3;
+    }
+  }
+
+  private binSelectRight() {
+    this.selectedBin += 1;
+    if (this.selectedBin === 4) {
+      this.selectedBin = 0;
+    }
+  }
+
   public constructor(private ngZone: NgZone, private gameService: GameService) {
     this.gameService.pile.pipe(
       filter((d: Dechet[], i: number) => {
@@ -117,7 +133,7 @@ export class EngineService implements OnDestroy {
   private placeInHand(dechet: Dechet): void {
     // TODO Change image id
     this.dechetInHand = dechet;
-    const spriteDechetMap = new THREE.TextureLoader().load( `/assets/0.png` );
+    const spriteDechetMap = new THREE.TextureLoader().load( `/assets/${this.dechetInHand.id}.png` );
     const dechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
     this.dechetInHandSprite = new THREE.Sprite(dechetMaterial);
     this.dechetInHandSprite.scale.x = 0.5;
@@ -129,7 +145,6 @@ export class EngineService implements OnDestroy {
   }
 
   private dropDechet(): void {
-    // TODO: Drop the current dechet
     this.dechetInHand = undefined;
     this.fallingSprites.push(this.dechetInHandSprite);
   }
@@ -158,6 +173,15 @@ export class EngineService implements OnDestroy {
           // drop item
 
           // update points
+          console.log(this.selectedBin);
+          if (this.dechetInHand !== undefined) {
+            if (this.selectedBin === this.dechetInHand.bin) {
+              this.gameService.points += 10000;
+            }
+          }
+          
+          
+
           // TODO
           if (this.dechetInHand !== undefined) {
             this.dropDechet();
@@ -173,6 +197,7 @@ export class EngineService implements OnDestroy {
         }
         if (e.key === 'ArrowLeft') {
           // left
+          this.binSelectLeft();
             if (this.hand.position.x - 1.15 > -1.5 ) {
               this.hand.translateX(-1.15);
               if (this.dechetInHand !== undefined) {
@@ -187,6 +212,7 @@ export class EngineService implements OnDestroy {
         }
         if (e.key === 'ArrowRight') {
           // right
+          this.binSelectRight();
           if (this.hand.position.x + 1.15 < 2.10) {
             this.hand.translateX(1.15);
             if (this.dechetInHand !== undefined) {

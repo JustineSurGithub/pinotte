@@ -13,6 +13,8 @@ export class GameService {
   private _pile = [];
   subscriptions: Subscription[] = [];
 
+  public points = 0;
+
   constructor(private dechetsService: DechetsService) {
     this.pile = new Subject();
     this._pile = [DECHETS[0], DECHETS[1], DECHETS[1], DECHETS[2]];
