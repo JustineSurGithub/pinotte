@@ -12,7 +12,7 @@ export class PileDechetComponent implements OnInit, OnDestroy {
   top = 0;
   subscriptions: Subscription[] = [];
 
-  constructor(private dechetsService: DechetsService, private cd: ChangeDetectorRef) {
+  constructor(private dechetsService: DechetsService) {
   }
 
 
