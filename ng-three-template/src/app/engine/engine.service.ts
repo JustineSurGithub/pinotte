@@ -108,11 +108,20 @@ export class EngineService implements OnDestroy {
         if (e.keyCode === 32) {
             this.gameService.toggleGameState();
         }
+        if (e.keyCode === 37) {
+          //left
+          
+        }
+        if (e.keyCode === 39) {
+          //right
+          
+        }
       };
     });
   }
 
   render() {
+    // Where to update the things you know
     this.frameId = requestAnimationFrame(() => {
       this.render();
     });
