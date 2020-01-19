@@ -118,10 +118,10 @@ export class EngineService implements OnDestroy {
         this.resize();
       });
       document.body.onkeyup = (e) => {
-        if (e.keyCode === 32) {
+        if (e.key === ' ') {
             this.gameService.toggleGameState();
         }
-        if (e.keyCode === 37) {
+        if (e.key === 'ArrowLeft') {
           // left
           if (this.hand.position.x - 1.15 > -1.5 ) {
             this.hand.translateX(-1.15);
@@ -130,7 +130,7 @@ export class EngineService implements OnDestroy {
           }
 
         }
-        if (e.keyCode === 39) {
+        if (e.key === 'ArrowRight') {
           // right
           if (this.hand.position.x + 1.15 < 2.10) {
             this.hand.translateX(1.15);
