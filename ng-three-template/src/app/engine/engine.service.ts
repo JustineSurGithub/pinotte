@@ -82,7 +82,7 @@ export class EngineService implements OnDestroy {
 
 
     // main
-    const spriteMap = new THREE.TextureLoader().load( '/assets/main.png' );
+    const spriteMap = new THREE.TextureLoader().load( '/assets/fabrice.png' );
     const spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
     this.hand = new THREE.Sprite( spriteMaterial );
     this.hand.position.z = 3;
