@@ -12,8 +12,6 @@ export class EngineService implements OnDestroy {
   private scene: THREE.Scene;
   private light: THREE.AmbientLight;
 
-  private cube: THREE.Mesh;
-
   private hand: THREE.Sprite;
 
   private frameId: number = null;
@@ -80,12 +78,6 @@ export class EngineService implements OnDestroy {
     this.light = new THREE.AmbientLight( 0x404040 );
     this.light.position.z = 10;
     this.scene.add(this.light);
-
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-
-    this.cube = new THREE.Mesh( geometry, material );
-    this.scene.add(this.cube);
 
 
     // main
