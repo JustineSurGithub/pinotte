@@ -85,8 +85,10 @@ export class EngineService implements OnDestroy {
     const spriteMap = new THREE.TextureLoader().load( '/assets/fabrice.png' );
     const spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
     this.hand = new THREE.Sprite( spriteMaterial );
+    this.hand.scale.x = 0.8;
+    this.hand.scale.y = 0.8;
     this.hand.position.z = 3;
-    this.hand.position.y = 1;
+    this.hand.position.y = 0.95;
     this.hand.position.x = -1.4;
     this.scene.add( this.hand );
 
@@ -100,7 +102,7 @@ export class EngineService implements OnDestroy {
     this.dechetSprite.scale.x = 0.5;
     this.dechetSprite.scale.y = 0.5;
     this.dechetSprite.position.z = 3;
-    this.dechetSprite.position.y = 0.5;
+    this.dechetSprite.position.y = 0.46;
     this.dechetSprite.position.x = -1.4;
     this.scene.add( this.dechetSprite );
 
