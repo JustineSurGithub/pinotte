@@ -1,8 +1,9 @@
 <h2>Pile de déchets</h2>
 <h5>Prochain déchet à trier:</h5>
-<li *ngFor="let dechet of pile, index as i">
-    <div *ngIf="i===0"><img src="{{idToUrlImage(dechet.id)}}" height="80" width="80" style = "border-style:dotted"></div>
-    <div *ngIf="i!=0"><img src="{{idToUrlImage(dechet.id)}}" height="80" width="80" style = "border-style:solid"></div>
+<div class="pile">
+  <div *ngFor="let dechet of pile, index as i">
+    <div *ngIf="i===0"><img src="{{idToUrlImage(dechet.id)}}" height="80" width="80" style="border-style:dotted"></div>
+    <div *ngIf="i!==0"><img src="{{idToUrlImage(dechet.id)}}" height="80" width="80" style="border-style:solid"></div>
     <br>
-<!--<div><span>id: </span>{{id}}</div>-->
-</li>
+  </div>
+</div>
