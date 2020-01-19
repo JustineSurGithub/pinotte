@@ -1,36 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { DechetsService } from '../services/dechets.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Dechet } from '../classes/dechet';
+import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-pile-dechet',
-  templateUrl: './pileDechet.html'
+  templateUrl: './pileDechet.component.html',
+  styleUrls: ['./pileDechet.component.scss']
 })
-export class PileDechetComponent implements OnInit {
-
-
-  pile: number[] = [];
-  top = 0;
-
-  constructor(private dechetsService: DechetsService) {
+export class PileDechetComponent implements OnInit, OnDestroy {
+  public pile: Dechet[];
+  constructor(private gameService: GameService) {
   }
 
-
-  addToPile(dechetId: number) {
-    this.pile.push(dechetId);
+  idToUrlImage(id: number) {
+    return `/assets/${id}.png`;
   }
-
-   popFromPile(): number {
-    return this.pile.pop();
-  }
-
-  ngOnInit() {
-    this.pile = [1, 2, 3, 4, 5, 6, 7];
-
-    this.dechetsService.dechetAddingTimer.subscribe(() => {
-      console.log('Adding to pile');
-      this.addToPile(this.pile[this.pile.length - 1] + 1);
-      console.log(this.pile);
+  ngOnInit(): void {
+    this.gameService.pile.subscribe((dechets) => {
+      this.pile = dechets.slice().reverse();
     });
   }
-
+  ngOnDestroy(): void {
+    // Do nothing for now
+  }
 }
