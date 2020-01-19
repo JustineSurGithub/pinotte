@@ -1,5 +1,6 @@
 <h2>Pile de déchets</h2>
 <h4>Prochain déchet à trier:</h4>
-<li *ngFor="let id of pile">
+<li *ngFor="let id of pile" class="dechet">
     <img src="{{idToUrlImage(id)}}" height="50" width="50">
-<div><span>id: </span>{{id}}</div>
+    <div><span>id: </span>{{id}}</div>
+</li>
