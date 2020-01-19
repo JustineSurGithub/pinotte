@@ -35,7 +35,11 @@ export class PointSystemService {
     if (correctBin !== bin) {
       return this.INCORRECT_GUESS_POINTS;
     } else {
-      return this.scoreMap.get(dechet);
+      const score = this.scoreMap.get(dechet);
+      if (score === undefined) {
+        throw new Error(`Score is undefined for dechet ${dechet.id} and bin ${Bin[bin]}`);
+      }
+      return score;
     }
   }
 }
