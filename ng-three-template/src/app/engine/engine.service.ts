@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 import { GameService } from '../services/game.service';
 import { Dechet } from '../classes/dechet';
+import { switchMap, filter } from 'rxjs/operators';
+import { NEVER, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,21 +27,18 @@ export class EngineService implements OnDestroy {
   private backgroundCamera: THREE.Camera;
   private dechetInHand: Dechet;
   private dechetInHandSprite: THREE.Sprite;
-  private changeWasFromHere = false;
+  private ignoreUpdate = false;
 
   public constructor(private ngZone: NgZone, private gameService: GameService) {
-    this.gameService.pile.subscribe((newestStack) => {
+    this.gameService.pile.pipe(
+      filter((d: Dechet[], i: number) => {
+        console.log(`Current state of hand is ${this.dechetInHand}`)
+        return !this.ignoreUpdate && this.dechetInHand === undefined && this.gameService.gameInProgress ;
+      })
+    ).subscribe((newestStack) => {
       // Check also if a check for game being started is really necessary..
-      console.log(`Update from stack (game state is ${this.gameService.gameInProgress}`);
-      if (this.dechetInHand === undefined && this.gameService.gameInProgress && !this.changeWasFromHere) {
-        console.log('Empty hand detected with update');
-        const top = this.gameService.popFromPile(false);
-        if (top !== undefined) {
-          this.placeInHand(top);
-        } else {
-          console.log(`Impossible`);
-        }
-      }
+      this.placeInHand(newestStack[0]);
+      const top = this.gameService.popFromPile();
     });
   }
 
@@ -113,20 +112,6 @@ export class EngineService implements OnDestroy {
     this.hand.position.y = 0.95;
     this.hand.position.x = -1.4;
     this.scene.add( this.hand );
-
-    // dechet
-    // const dechet = this.gameService.popFromPile();
-    // const spriteDechetMap = new THREE.TextureLoader().load( `/assets/0.png` );
-    // console.log(dechet.id);
-    // this.spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
-    // this.dechetSprite = new THREE.Sprite( this.spriteDechetMaterial );
-    // this.dechetSprite.scale.x = 0.5;
-    // this.dechetSprite.scale.y = 0.5;
-    // this.dechetSprite.position.z = 3;
-    // this.dechetSprite.position.y = 0.46;
-    // this.dechetSprite.position.x = -1.4;
-    // this.scene.add( this.dechetSprite );
-
   }
 
   private placeInHand(dechet: Dechet): void {
@@ -178,14 +163,13 @@ export class EngineService implements OnDestroy {
             this.dropDechet();
             // this.fallingSprites.push(this.dechetSprite);
           }
+          this.ignoreUpdate = true;
           // get next item from pile
-          this.changeWasFromHere = true;
           const dechet = this.gameService.popFromPile();
-          console.log(dechet, this.gameService.pile.value);
           if (dechet !== undefined) {
             this.placeInHand(dechet);
           }
-          this.changeWasFromHere = false;
+          this.ignoreUpdate = false;
         }
         if (e.key === 'ArrowLeft') {
           // left
