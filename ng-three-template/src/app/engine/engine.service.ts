@@ -15,6 +15,10 @@ export class EngineService implements OnDestroy {
   private hand: THREE.Sprite;
   private dechetSprite: THREE.Sprite;
 
+  private spriteDechetMaterial: THREE.SpriteMaterial;
+
+  private fallingSprites: THREE.Sprite[] = [];
+
   private frameId: number = null;
   private backgroundScene: THREE.Scene;
   private backgroundCamera: THREE.Camera;
@@ -93,12 +97,12 @@ export class EngineService implements OnDestroy {
     this.scene.add( this.hand );
 
     //dechet 
-    const dechetId = this.gameService.seekPile();
+    const dechetId = this.gameService.popFromPile().id;
     const spriteDechetMap = new THREE.TextureLoader().load( `/assets/${dechetId}.png` );
     console.log(dechetId);
     //const spriteDechetMap = new THREE.TextureLoader().load( `/assets/0.png` );
-    const spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
-    this.dechetSprite = new THREE.Sprite( spriteDechetMaterial );
+    this.spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
+    this.dechetSprite = new THREE.Sprite( this.spriteDechetMaterial );
     this.dechetSprite.scale.x = 0.5;
     this.dechetSprite.scale.y = 0.5;
     this.dechetSprite.position.z = 3;
@@ -128,7 +132,25 @@ export class EngineService implements OnDestroy {
       });
       document.body.onkeyup = (e) => {
         if (e.key === ' ') {
-            this.gameService.toggleGameState();
+          //start game
+          this.gameService.toggleGameState();
+          //drop item
+          this.fallingSprites.push(this.dechetSprite);
+
+          //update points
+          //TODO
+
+          //get next item from pile
+          const dechetId = this.gameService.popFromPile().id;
+          const spriteDechetMap = new THREE.TextureLoader().load( `/assets/${dechetId}.png` );
+          this.spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
+          this.dechetSprite = new THREE.Sprite( this.spriteDechetMaterial );
+          this.dechetSprite.scale.x = 0.5;
+          this.dechetSprite.scale.y = 0.5;
+          this.dechetSprite.position.z = 3;
+          this.dechetSprite.position.y = 0.46;
+          this.dechetSprite.position.x = this.hand.position.x;
+          this.scene.add( this.dechetSprite );
         }
         if (e.key === 'ArrowLeft') {
           // left
@@ -161,6 +183,16 @@ export class EngineService implements OnDestroy {
     this.frameId = requestAnimationFrame(() => {
       this.render();
     });
+
+    for (const dech of this.fallingSprites) {
+      dech.translateY(-0.05);
+
+      if (dech.position.y < -0.5) {
+        this.scene.remove(dech);
+      }
+
+    }
+
     this.renderer.autoClear = false;
     this.renderer.clear();
     this.renderer.render(this.backgroundScene, this.backgroundCamera);
