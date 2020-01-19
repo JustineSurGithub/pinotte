@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, interval, Observable, NEVER, of } from 'rxjs';
-import { skipWhile, skip, map, switchMap } from 'rxjs/operators';
+import { interval, NEVER, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

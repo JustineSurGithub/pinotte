@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { DechetsService } from '../services/dechets.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pile-dechet',
-  templateUrl: './pileDechet.html'
+  templateUrl: './pileDechet.component.html',
+  styleUrls: ['./pileDechet.component.scss']
 })
 export class PileDechetComponent implements OnInit {
 
