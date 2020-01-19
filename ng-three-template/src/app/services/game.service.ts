@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DechetsService } from './dechets.service';
 import { Dechet, DECHETS } from '../classes/dechet';
 import { Subscription, BehaviorSubject } from 'rxjs';
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +18,16 @@ export class GameService {
       this.addToPile(newDechet);
     });
     this.subscriptions.push(s);
+    // TODO : Move
+    document.body.addEventListener('keyup', (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        this.toggleGameState();
+      }
+    });
   }
 
   gameInProgress = false;
   startGame() {
-    // this.gameInProgress = true;
     this.dechetsService.startDechetStackUpdates();
     console.log('Game starting');
   }
@@ -46,18 +52,20 @@ export class GameService {
     this.pile.next([...this.pile.value, dechet]);
   }
 
-  seekPile(): number {
-    const dechet = this.popFromPile();
-    this.addToPile(dechet);
-    return dechet.id;
-  }
-
-   popFromPile(): Dechet {
-    // TODO: remove hack
-    const withoutFirst = Array.from(this.pile.value);
-    const elem = withoutFirst.shift();
-    this.pile.next(withoutFirst);
-    return elem;
+  // TODO: remove hack
+   popFromPile(notify = true): Dechet {
+    const withoutFirst = _.clone(this.pile.value);
+    const top = _.first(withoutFirst);
+    if (top === undefined) {
+      return undefined;
+    } else {
+      if (notify) {
+        this.pile.next(_.tail(withoutFirst));
+      } else {
+        this.pile.value.unshift();
+      }
+      return top;
+    }
   }
 
   private cancelSubscriptions(): void {

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 import { GameService } from '../services/game.service';
+import { Dechet } from '../classes/dechet';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,25 @@ export class EngineService implements OnDestroy {
   private frameId: number = null;
   private backgroundScene: THREE.Scene;
   private backgroundCamera: THREE.Camera;
+  private dechetInHand: Dechet;
+  private dechetInHandSprite: THREE.Sprite;
+  private changeWasFromHere = false;
 
-  public constructor(private ngZone: NgZone, private gameService: GameService) {}
+  public constructor(private ngZone: NgZone, private gameService: GameService) {
+    this.gameService.pile.subscribe((newestStack) => {
+      // Check also if a check for game being started is really necessary..
+      console.log(`Update from stack (game state is ${this.gameService.gameInProgress}`);
+      if (this.dechetInHand === undefined && this.gameService.gameInProgress && !this.changeWasFromHere) {
+        console.log('Empty hand detected with update');
+        const top = this.gameService.popFromPile(false);
+        if (top !== undefined) {
+          this.placeInHand(top);
+        } else {
+          console.log(`Impossible`);
+        }
+      }
+    });
+  }
 
   public ngOnDestroy() {
     if (this.frameId != null) {
@@ -96,20 +114,39 @@ export class EngineService implements OnDestroy {
     this.hand.position.x = -1.4;
     this.scene.add( this.hand );
 
-    //dechet 
-    const dechetId = this.gameService.popFromPile().id;
-    const spriteDechetMap = new THREE.TextureLoader().load( `/assets/${dechetId}.png` );
-    console.log(dechetId);
-    //const spriteDechetMap = new THREE.TextureLoader().load( `/assets/0.png` );
-    this.spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
-    this.dechetSprite = new THREE.Sprite( this.spriteDechetMaterial );
-    this.dechetSprite.scale.x = 0.5;
-    this.dechetSprite.scale.y = 0.5;
-    this.dechetSprite.position.z = 3;
-    this.dechetSprite.position.y = 0.46;
-    this.dechetSprite.position.x = -1.4;
-    this.scene.add( this.dechetSprite );
+    // dechet
+    // const dechet = this.gameService.popFromPile();
+    // const spriteDechetMap = new THREE.TextureLoader().load( `/assets/0.png` );
+    // console.log(dechet.id);
+    // this.spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
+    // this.dechetSprite = new THREE.Sprite( this.spriteDechetMaterial );
+    // this.dechetSprite.scale.x = 0.5;
+    // this.dechetSprite.scale.y = 0.5;
+    // this.dechetSprite.position.z = 3;
+    // this.dechetSprite.position.y = 0.46;
+    // this.dechetSprite.position.x = -1.4;
+    // this.scene.add( this.dechetSprite );
 
+  }
+
+  private placeInHand(dechet: Dechet): void {
+    // TODO Change image id
+    this.dechetInHand = dechet;
+    const spriteDechetMap = new THREE.TextureLoader().load( `/assets/0.png` );
+    const dechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
+    this.dechetInHandSprite = new THREE.Sprite(dechetMaterial);
+    this.dechetInHandSprite.scale.x = 0.5;
+    this.dechetInHandSprite.scale.y = 0.5;
+    this.dechetInHandSprite.position.z = 3;
+    this.dechetInHandSprite.position.y = 0.46;
+    this.dechetInHandSprite.position.x = this.hand.position.x;
+    this.scene.add( this.dechetInHandSprite );
+  }
+
+  private dropDechet(): void {
+    // TODO: Drop the current dechet
+    this.dechetInHand = undefined;
+    this.fallingSprites.push(this.dechetInHandSprite);
   }
 
   animate(): void {
@@ -132,45 +169,50 @@ export class EngineService implements OnDestroy {
       });
       document.body.onkeyup = (e) => {
         if (e.key === ' ') {
-          //start game
-          this.gameService.toggleGameState();
-          //drop item
-          this.fallingSprites.push(this.dechetSprite);
+          // start game
+          // drop item
 
-          //update points
-          //TODO
-
-          //get next item from pile
-          const dechetId = this.gameService.popFromPile().id;
-          const spriteDechetMap = new THREE.TextureLoader().load( `/assets/${dechetId}.png` );
-          this.spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
-          this.dechetSprite = new THREE.Sprite( this.spriteDechetMaterial );
-          this.dechetSprite.scale.x = 0.5;
-          this.dechetSprite.scale.y = 0.5;
-          this.dechetSprite.position.z = 3;
-          this.dechetSprite.position.y = 0.46;
-          this.dechetSprite.position.x = this.hand.position.x;
-          this.scene.add( this.dechetSprite );
+          // update points
+          // TODO
+          if (this.dechetInHand !== undefined) {
+            this.dropDechet();
+            // this.fallingSprites.push(this.dechetSprite);
+          }
+          // get next item from pile
+          this.changeWasFromHere = true;
+          const dechet = this.gameService.popFromPile();
+          console.log(dechet, this.gameService.pile.value);
+          if (dechet !== undefined) {
+            this.placeInHand(dechet);
+          }
+          this.changeWasFromHere = false;
         }
         if (e.key === 'ArrowLeft') {
           // left
-          if (this.hand.position.x - 1.15 > -1.5 ) {
-            this.hand.translateX(-1.15);
-            this.dechetSprite.translateX(-1.15);
-          } else {
-            this.hand.position.x = 2.05;
-            this.dechetSprite.position.x = 2.05;
-          }
-
+            if (this.hand.position.x - 1.15 > -1.5 ) {
+              this.hand.translateX(-1.15);
+              if (this.dechetInHand !== undefined) {
+                this.dechetInHandSprite.translateX(-1.15);
+              }
+            } else {
+              this.hand.position.x = 2.05;
+              if (this.dechetInHand !== undefined) {
+                this.dechetInHandSprite.position.x = 2.05;
+              }
+            }
         }
         if (e.key === 'ArrowRight') {
           // right
           if (this.hand.position.x + 1.15 < 2.10) {
             this.hand.translateX(1.15);
-            this.dechetSprite.translateX(1.15);
+            if (this.dechetInHand !== undefined) {
+              this.dechetInHandSprite.translateX(1.15);
+            }
           } else {
             this.hand.position.x = -1.4;
-            this.dechetSprite.position.x = -1.4;
+            if (this.dechetInHand !== undefined) {
+              this.dechetInHandSprite.position.x = -1.4;
+            }
           }
 
         }
