@@ -37,8 +37,10 @@ export class GameService {
   }
 
   addToPile(dechet: Dechet) {
-    if (this.pile.value.length > this.MAX_SIZE) {
-      // TODO: update game logic: the game has ended
+    if (this.pile.value.length >= this.MAX_SIZE) {
+      console.log('stopping');
+      console.log(this.pile.value.length);
+      this.stopGame();
       return;
     }
     this.pile.next([...this.pile.value, dechet]);

@@ -21,7 +21,7 @@ export class DechetsService {
 
   generateRandomDechet(): Dechet {
     // TODO: Change
-    return DECHETS[0];
+    return DECHETS[Math.floor(Math.random() * DECHETS.length)];
   }
 
   constructor() {
