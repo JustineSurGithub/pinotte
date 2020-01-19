@@ -97,7 +97,7 @@ export class EngineService implements OnDestroy {
     this.scene.add( this.hand );
 
     //dechet 
-    const dechetId = this.gameService.seekPile();
+    const dechetId = this.gameService.popFromPile().id;
     const spriteDechetMap = new THREE.TextureLoader().load( `/assets/${dechetId}.png` );
     console.log(dechetId);
     //const spriteDechetMap = new THREE.TextureLoader().load( `/assets/0.png` );
@@ -141,7 +141,7 @@ export class EngineService implements OnDestroy {
           //TODO
 
           //get next item from pile
-          const dechetId = this.gameService.seekPile();
+          const dechetId = this.gameService.popFromPile().id;
           const spriteDechetMap = new THREE.TextureLoader().load( `/assets/${dechetId}.png` );
           this.spriteDechetMaterial = new THREE.SpriteMaterial( { map: spriteDechetMap, color: 0xffffff } );
           this.dechetSprite = new THREE.Sprite( this.spriteDechetMaterial );
