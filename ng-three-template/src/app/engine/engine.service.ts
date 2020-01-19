@@ -15,6 +15,8 @@ export class EngineService implements OnDestroy {
   private hand: THREE.Sprite;
   private dechetSprite: THREE.Sprite;
 
+  private fallingSprites: THREE.Sprite[] = [];
+
   private frameId: number = null;
   private backgroundScene: THREE.Scene;
   private backgroundCamera: THREE.Camera;
@@ -128,7 +130,17 @@ export class EngineService implements OnDestroy {
       });
       document.body.onkeyup = (e) => {
         if (e.key === ' ') {
-            this.gameService.toggleGameState();
+          //start game
+          this.gameService.toggleGameState();
+          //drop item
+          this.fallingSprites.push(this.dechetSprite);
+
+          //update points
+          //TODO
+
+          //get next item from pile
+          //TODO
+
         }
         if (e.key === 'ArrowLeft') {
           // left
@@ -161,6 +173,16 @@ export class EngineService implements OnDestroy {
     this.frameId = requestAnimationFrame(() => {
       this.render();
     });
+
+    for (const dech of this.fallingSprites) {
+      dech.translateY(-0.05);
+
+      if (dech.position.y < -0.5) {
+        this.scene.remove(dech);
+      }
+
+    }
+
     this.renderer.autoClear = false;
     this.renderer.clear();
     this.renderer.render(this.backgroundScene, this.backgroundCamera);
