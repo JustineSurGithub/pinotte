@@ -4,6 +4,7 @@ import { GameService } from '../services/game.service';
 import { Dechet } from '../classes/dechet';
 import { switchMap, filter } from 'rxjs/operators';
 import { NEVER, of } from 'rxjs';
+import { PointSystemService } from '../point-system.service';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +46,7 @@ export class EngineService implements OnDestroy {
     }
   }
 
-  public constructor(private ngZone: NgZone, private gameService: GameService) {
+  public constructor(private ngZone: NgZone, private gameService: GameService, private ps: PointSystemService) {
     this.gameService.pile.pipe(
       filter((d: Dechet[], i: number) => {
         console.log(`Current state of hand is ${this.dechetInHand}`)
@@ -175,12 +176,8 @@ export class EngineService implements OnDestroy {
           // update points
           console.log(this.selectedBin);
           if (this.dechetInHand !== undefined) {
-            if (this.selectedBin === this.dechetInHand.bin) {
-              this.gameService.points += 10000;
-            }
+              this.gameService.points += this.ps.scoreForClassification(this.dechetInHand, this.selectedBin);
           }
-          
-          
 
           // TODO
           if (this.dechetInHand !== undefined) {
