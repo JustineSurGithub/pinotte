@@ -33,10 +33,10 @@ export class PileDechetComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pile = [0, 8, 8, 18, 27, 8];
+    this.pile = [0, 8, 8, 18, 27, 8, 0, 0];
 
     const s = this.dechetsService.dechetAddingTimer.subscribe(() => {
-      this.addToPile(this.pile[this.pile.length - 1] + 1);
+      //this.addToPile(this.pile[this.pile.length - 1] + 1);
     });
     this.subscriptions.push(s);
   }

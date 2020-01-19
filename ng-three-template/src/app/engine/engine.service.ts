@@ -32,7 +32,7 @@ export class EngineService implements OnDestroy {
     this.backgroundScene = new THREE.Scene();
     this.backgroundCamera = new THREE.Camera();
 
-    const loader = new THREE.TextureLoader().load('/assets/poubelle-poly.jpg',
+    const loader = new THREE.TextureLoader().load('/assets/poubelles_grande_friture.png',
     (texture) => {
       console.log('Correctly loaded the texture', texture);
       const tex = new THREE.MeshBasicMaterial({
