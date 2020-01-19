@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DechetsService } from './dechets.service';
 import { Dechet, DECHETS } from '../classes/dechet';
-import { Subscription, BehaviorSubject } from 'rxjs';
+import { Subscription, BehaviorSubject, Subject } from 'rxjs';
 import * as _ from 'lodash';
 
 @Injectable({
@@ -9,11 +9,15 @@ import * as _ from 'lodash';
 })
 export class GameService {
   private readonly MAX_SIZE = 8;
-  public pile: BehaviorSubject<Dechet[]>;
+  public pile: Subject<Dechet[]>;
+  private _pile = [];
   subscriptions: Subscription[] = [];
 
+  public points = 0;
+
   constructor(private dechetsService: DechetsService) {
-    this.pile = new BehaviorSubject([DECHETS[0], DECHETS[1], DECHETS[1], DECHETS[2]]);
+    this.pile = new Subject();
+    this._pile = [DECHETS[0], DECHETS[1], DECHETS[1], DECHETS[2]];
     const s = this.dechetsService.dechetAddingTimer.subscribe((newDechet: Dechet) => {
       this.addToPile(newDechet);
     });
@@ -42,28 +46,31 @@ export class GameService {
     this.gameInProgress = !this.gameInProgress;
   }
 
-  addToPile(dechet: Dechet) {
-    if (this.pile.value.length >= this.MAX_SIZE) {
+  private addToPile(dechet: Dechet) {
+    if (this._pile.length >= this.MAX_SIZE) {
       console.log('stopping');
-      console.log(this.pile.value.length);
+      console.log(this._pile.length);
       this.stopGame();
       return;
     }
-    this.pile.next([...this.pile.value, dechet]);
+    this._pile.push(dechet);
+    this.pile.next(this._pile);
+  }
+
+  public hasContentInPile(): boolean {
+    return this._pile.length > 0;
   }
 
   // TODO: remove hack
-   popFromPile(notify = true): Dechet {
-    const withoutFirst = _.clone(this.pile.value);
-    const top = _.first(withoutFirst);
+   popFromPile(): Dechet {
+    const top = _.first(this._pile);
     if (top === undefined) {
+      console.log(`[popFromPilke] There is no element in the stack...`);
       return undefined;
     } else {
-      if (notify) {
-        this.pile.next(_.tail(withoutFirst));
-      } else {
-        this.pile.value.unshift();
-      }
+      const f = this._pile.shift();
+      this.pile.next(this._pile);
+      console.assert(f === top, 'f and top are not the same');
       return top;
     }
   }
