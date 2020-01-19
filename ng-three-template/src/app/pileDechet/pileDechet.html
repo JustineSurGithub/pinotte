@@ -1,6 +1,8 @@
 <h2>Pile de déchets</h2>
-<h4>Prochain déchet à trier:</h4>
-<li *ngFor="let id of pile.slice().reverse()">
-    <img src="{{idToUrlImage(id)}}" height="80" width="80">
-<div><span>id: </span>{{id}}</div>
+<h5>Prochain déchet à trier:</h5>
+<li *ngFor="let id of pile.slice().reverse(), index as i">
+    <div *ngIf="i===0"><img src="{{idToUrlImage(id)}}" height="80" width="80" style = "border-style:dotted"></div>
+    <div *ngIf="i!=0"><img src="{{idToUrlImage(id)}}" height="80" width="80" style = "border-style:solid"></div>
+    <br>
+<!--<div><span>id: </span>{{id}}</div>-->
 </li>
