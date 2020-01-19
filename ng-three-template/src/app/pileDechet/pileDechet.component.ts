@@ -13,13 +13,11 @@ export class PileDechetComponent implements OnInit, OnDestroy {
   }
 
   idToUrlImage(id: number) {
-    // TODO change back. Thx.
-    return `/assets/0.png`;
     return `/assets/${id}.png`;
   }
   ngOnInit(): void {
     this.gameService.pile.subscribe((dechets) => {
-      this.pile = dechets.slice().reverse();
+      this.pile = dechets.reverse();
     });
   }
   ngOnDestroy(): void {
