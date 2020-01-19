@@ -46,6 +46,12 @@ export class GameService {
     this.pile.next([...this.pile.value, dechet]);
   }
 
+  seekPile(): number {
+    const dechet = this.popFromPile();
+    this.addToPile(dechet);
+    return dechet.id;
+  }
+
    popFromPile(): Dechet {
     // TODO: remove hack
     const withoutFirst = Array.from(this.pile.value);
