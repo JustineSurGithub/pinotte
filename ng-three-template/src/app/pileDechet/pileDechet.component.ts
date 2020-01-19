@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pile-dechet',
-  templateUrl: './pileDechet.html',
+  templateUrl: './pileDechet.component.html',
   styleUrls: ['./pileDechet.component.scss']
 })
 export class PileDechetComponent implements OnInit {
