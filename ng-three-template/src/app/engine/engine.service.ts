@@ -175,9 +175,15 @@ export class EngineService implements OnDestroy {
 
           // update points
           console.log(this.selectedBin);
-          if (this.dechetInHand !== undefined) {
+          /*if (this.dechetInHand !== undefined) {
               this.gameService.points += this.ps.scoreForClassification(this.dechetInHand, this.selectedBin);
-          }
+          }*/
+          if (this.dechetInHand !== undefined) {
+            if(this.dechetInHand.bin === this.selectedBin) {
+              this.gameService.points += 10000;
+            }
+        }
+
 
           // TODO
           if (this.dechetInHand !== undefined) {
