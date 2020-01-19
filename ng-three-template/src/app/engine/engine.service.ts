@@ -81,12 +81,6 @@ export class EngineService implements OnDestroy {
     this.light.position.z = 10;
     this.scene.add(this.light);
 
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-
-    this.cube = new THREE.Mesh( geometry, material );
-    this.scene.add(this.cube);
-
 
     //main
     var spriteMap = new THREE.TextureLoader().load( "/assets/main.png" );
