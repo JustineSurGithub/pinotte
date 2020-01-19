@@ -89,12 +89,13 @@ export class EngineService implements OnDestroy {
         material = new THREE.MeshBasicMaterial({
           map: texture
         });
+        //const material = new THREE.MeshBasicMaterial({ map: texture });
+      this.cube = new THREE.Mesh( geometry, material );
+      this.scene.add(this.cube);
     });
     
 
-    //const material = new THREE.MeshBasicMaterial({ map: texture });
-    this.cube = new THREE.Mesh( geometry, material );
-    this.scene.add(this.cube);
+    
 
   }
 
@@ -131,7 +132,7 @@ export class EngineService implements OnDestroy {
     //this.cube.rotation.y += 0.01;
     
     
-    this.renderer.render(this.backgroundScene, this.backgroundCamera);
+    //this.renderer.render(this.backgroundScene, this.backgroundCamera);
 
     this.renderer.render(this.scene, this.camera);
 

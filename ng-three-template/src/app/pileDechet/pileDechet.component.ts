@@ -7,15 +7,22 @@ import { DechetsService } from '../services/dechets.service';
 })
 export class PileDechetComponent implements OnInit {
 
-
-  pile: number[] = [];
-  top = 0;
+  private readonly MAX_SIZE = 8;
+  private pile: number[] = [];
 
   constructor(private dechetsService: DechetsService) {
   }
 
+  idToUrlImage(id: number) {
+    return `/assets/${id}.png`;
+  }
 
   addToPile(dechetId: number) {
+    if (this.pile.length > this.MAX_SIZE) {
+      //TODO: update game logic: the game has ended
+
+      return;
+    }
     this.pile.push(dechetId);
   }
 
@@ -24,7 +31,7 @@ export class PileDechetComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pile = [1, 2, 3, 4, 5, 6, 7];
+    this.pile = [0, 8, 8, 18, 27, 8];
 
     this.dechetsService.dechetAddingTimer.subscribe(() => {
       console.log('Adding to pile');
