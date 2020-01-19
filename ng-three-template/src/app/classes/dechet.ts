@@ -35,13 +35,13 @@ export const DECHETS: Dechet[] =  [
     { id  : 25, name : 'bouffe à chats', bin: Bin.Compost},
     { id  : 26, name : 'écales de pinottes', bin: Bin.Compost},
     { id  : 27, name : 'soupe', bin: Bin.Waste},
-    { id  : 28, name : 'couches hygiéniques', bin: Bin.Paper},
-    { id  : 29, name : 'gomme à mâcher', bin: Bin.Paper},
-    { id  : 30, name : 'litière de chat', bin: Bin.Paper},
-    { id  : 31, name : 'feuilles mortes', bin: Bin.Paper},
-    { id  : 32, name : 'roches', bin: Bin.Paper},
-    { id  : 33, name : 'piles', bin: Bin.Paper},
-    { id  : 34, name : 'céramique', bin: Bin.Paper},
+    { id  : 28, name : 'couches hygiéniques', bin: Bin.Waste},
+    { id  : 29, name : 'gomme à mâcher', bin: Bin.Waste},
+    { id  : 30, name : 'litière de chat', bin: Bin.Waste},
+    { id  : 31, name : 'feuilles mortes', bin: Bin.Waste},
+    { id  : 32, name : 'roches', bin: Bin.Waste},
+    { id  : 33, name : 'piles', bin: Bin.Waste},
+    { id  : 34, name : 'céramique', bin: Bin.Waste},
     { id  : 35, name : 'polystyrène', bin: Bin.Waste}
 ];
 
