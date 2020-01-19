@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { DechetsService } from '../services/dechets.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pile-dechet',
@@ -9,6 +10,7 @@ export class PileDechetComponent implements OnInit {
 
   private readonly MAX_SIZE = 8;
   private pile: number[] = [];
+  subscriptions: Subscription[] = [];
 
   constructor(private dechetsService: DechetsService) {
   }
@@ -23,7 +25,7 @@ export class PileDechetComponent implements OnInit {
 
       return;
     }
-    this.pile.push(dechetId);
+    this.pile = [...this.pile, dechetId];
   }
 
    popFromPile(): number {
@@ -33,11 +35,14 @@ export class PileDechetComponent implements OnInit {
   ngOnInit() {
     this.pile = [0, 8, 8, 18, 27, 8];
 
-    this.dechetsService.dechetAddingTimer.subscribe(() => {
-      console.log('Adding to pile');
+    const s = this.dechetsService.dechetAddingTimer.subscribe(() => {
       this.addToPile(this.pile[this.pile.length - 1] + 1);
-      console.log(this.pile);
     });
+    this.subscriptions.push(s);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
 }

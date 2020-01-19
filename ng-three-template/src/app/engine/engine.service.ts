@@ -10,15 +10,13 @@ export class EngineService implements OnDestroy {
   private renderer: THREE.WebGLRenderer;
   private camera: THREE.PerspectiveCamera;
   private scene: THREE.Scene;
-
-  private backgroundScene: THREE.Scene;
-  private backgroundCamera: THREE.Camera;
-
   private light: THREE.AmbientLight;
 
   private cube: THREE.Mesh;
 
   private frameId: number = null;
+  private backgroundScene: THREE.Scene;
+  private backgroundCamera: THREE.Camera;
 
   public constructor(private ngZone: NgZone, private gameService: GameService) {}
 
@@ -29,37 +27,36 @@ export class EngineService implements OnDestroy {
   }
 
   background() {
-    // Set up the main camera
-    //this.camera.position.z = 5;
 
-    // Load the background texture
-    //const texture = new THREE.TextureLoader().load('poubelle-poly.jpg');
-    //var material = new THREE.MeshBasicMaterial({map: texture});
-    //let material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-
-    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const loader = new THREE.TextureLoader();
-   
-
-
-    //material.color.set(0xff0000);
-    const backgroundMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(2, 2, 0),
-        material);
-
-    
     // Create your background scene
     this.backgroundScene = new THREE.Scene();
     this.backgroundCamera = new THREE.Camera();
+
+    const loader = new THREE.TextureLoader().load('/assets/poubelle-poly.jpg',
+    (texture) => {
+      console.log('Correctly loaded the texture', texture);
+      const tex = new THREE.MeshBasicMaterial({
+        map: texture,
+        depthTest: false,
+        depthWrite: false,
+      });
+      const loaded = new THREE.Mesh(new THREE.PlaneGeometry(2, 2, 0), tex);
+      this.backgroundScene.add(loaded);
+    }, (event: ProgressEvent) => {
+
+    }, (event: ErrorEvent) => {
+      console.log('There was an error loading the texture:');
+      console.warn(event);
+    });
+
     this.backgroundScene.add(this.backgroundCamera);
-    this.backgroundScene.add(backgroundMesh);
   }
 
 
   createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     // The first step is to get the reference of the canvas element from our HTML document
     this.canvas = canvas.nativeElement;
-    //this.canvas = document.querySelector('#c');
+    // this.canvas = document.querySelector('#c');
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -83,20 +80,10 @@ export class EngineService implements OnDestroy {
     this.scene.add(this.light);
 
     const geometry = new THREE.BoxGeometry(1, 1, 1);
-    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const loader = new THREE.TextureLoader().load('poubelle-poly.jpg',
-      function(texture) {
-        material = new THREE.MeshBasicMaterial({
-          map: texture
-        });
-        //const material = new THREE.MeshBasicMaterial({ map: texture });
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
       this.cube = new THREE.Mesh( geometry, material );
       this.scene.add(this.cube);
-    });
-    
-
-    
-
   }
 
   animate(): void {
@@ -114,12 +101,14 @@ export class EngineService implements OnDestroy {
       window.addEventListener('resize', () => {
         this.resize();
       });
-
-      document.body.onkeyup = ((e) => {
-        if (e.keyCode === 32) {
-            this.gameService.startGame();
-        }
+      window.addEventListener('resize', () => {
+        this.resize();
       });
+      document.body.onkeyup = (e) => {
+        if (e.keyCode === 32) {
+            this.gameService.toggleGameState();
+        }
+      };
     });
   }
 
@@ -127,16 +116,10 @@ export class EngineService implements OnDestroy {
     this.frameId = requestAnimationFrame(() => {
       this.render();
     });
-
-    //this.cube.rotation.x += 0.01;
-    //this.cube.rotation.y += 0.01;
-    
-    
-    //this.renderer.render(this.backgroundScene, this.backgroundCamera);
-
+    this.renderer.autoClear = false;
+    this.renderer.clear();
+    this.renderer.render(this.backgroundScene, this.backgroundCamera);
     this.renderer.render(this.scene, this.camera);
-
-    
   }
 
   resize() {
@@ -148,5 +131,4 @@ export class EngineService implements OnDestroy {
 
     this.renderer.setSize( width, height );
   }
-
 }
