@@ -5,6 +5,7 @@ import { Dechet } from '../classes/dechet';
 import { switchMap, filter } from 'rxjs/operators';
 import { NEVER, of } from 'rxjs';
 import { PointSystemService } from '../point-system.service';
+import { Bin } from '../classes/bin';
 
 @Injectable({
   providedIn: 'root'
@@ -185,7 +186,7 @@ export class EngineService implements OnDestroy {
               }
               
             }
-        }
+          }
 
 
           // TODO
@@ -200,6 +201,33 @@ export class EngineService implements OnDestroy {
             this.placeInHand(dechet);
           }
           this.ignoreUpdate = false;
+
+          let audio = new Audio();
+          if (this.selectedBin === Bin.Recycling) {
+            audio = new Audio();
+            audio.src = '/assets/bedignebedagne.mp3';
+            audio.load();
+            audio.play();
+          }
+          if (this.selectedBin === Bin.Compost) {
+            audio = new Audio();
+            audio.src = '/assets/gfouuptut.mp3';
+            audio.load();
+            audio.play();
+          }
+          if (this.selectedBin === Bin.Waste) {
+            audio = new Audio();
+            audio.src = '/assets/poubelle.mp3';
+            audio.load();
+            audio.play();
+          }
+          if (this.selectedBin === 3) {
+            audio = new Audio();
+            audio.src = '/assets/fouish.mp3';
+            audio.load();
+            audio.play();
+          }
+
         }
         if (e.key === 'ArrowLeft') {
           // left

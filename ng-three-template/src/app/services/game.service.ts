@@ -38,6 +38,10 @@ export class GameService {
   }
 
   stopGame(): any {
+    const audio = new Audio();
+    audio.src = '/assets/gameover.mp3';
+    audio.load();
+    audio.play();
     console.log('Game stopping');
     this.dechetsService.stopDechetStackUpdates();
   }
@@ -47,8 +51,21 @@ export class GameService {
     this.gameInProgress = !this.gameInProgress;
   }
 
+  playedSound = false;
+
   getGameStatus(): boolean {
+    if (!this.playedSound && !this.gameInProgress) {
+      const audio = new Audio();
+          
+          audio.src = '/assets/gameover.mp3';
+          audio.load();
+          audio.play();
+          console.log("testerino");
+          this.playedSound = true;
+    }
+
     return this.gameInProgress;
+
   }
 
   private addToPile(dechet: Dechet) {
