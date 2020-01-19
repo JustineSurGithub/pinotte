@@ -31,6 +31,7 @@ export class GameService {
   }
 
   gameInProgress = false;
+  gameover = false;
   startGame() {
     this.dechetsService.startDechetStackUpdates();
     console.log('Game starting');
@@ -46,11 +47,16 @@ export class GameService {
     this.gameInProgress = !this.gameInProgress;
   }
 
+  getGameStatus(): boolean {
+    return this.gameInProgress;
+  }
+
   private addToPile(dechet: Dechet) {
     if (this._pile.length >= this.MAX_SIZE) {
       console.log('stopping');
       console.log(this._pile.length);
       this.stopGame();
+      this.gameover = true;
       return;
     }
     this._pile.push(dechet);

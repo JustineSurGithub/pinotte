@@ -179,8 +179,11 @@ export class EngineService implements OnDestroy {
               this.gameService.points += this.ps.scoreForClassification(this.dechetInHand, this.selectedBin);
           }*/
           if (this.dechetInHand !== undefined) {
-            if(this.dechetInHand.bin === this.selectedBin) {
-              this.gameService.points += 10000;
+            if (this.dechetInHand.bin === this.selectedBin) {
+              if (!this.gameService.gameover) {
+                this.gameService.points += 10000;
+              }
+              
             }
         }
 

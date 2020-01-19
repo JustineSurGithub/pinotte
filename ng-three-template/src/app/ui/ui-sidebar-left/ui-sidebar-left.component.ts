@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'app-ui-sidebar-left',
@@ -7,7 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UiSidebarLeftComponent implements OnInit {
 
-  constructor() { }
+ 
+
+  constructor(private gameService: GameService) { }
+
+  retrieveGameStatus() {
+    return this.gameService.gameover;
+  }
 
   ngOnInit() {
   }
