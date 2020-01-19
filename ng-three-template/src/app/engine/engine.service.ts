@@ -14,6 +14,8 @@ export class EngineService implements OnDestroy {
 
   private cube: THREE.Mesh;
 
+  private hand: THREE.Sprite;
+
   private frameId: number = null;
   private backgroundScene: THREE.Scene;
   private backgroundCamera: THREE.Camera;
@@ -82,8 +84,19 @@ export class EngineService implements OnDestroy {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
-      this.cube = new THREE.Mesh( geometry, material );
-      this.scene.add(this.cube);
+    this.cube = new THREE.Mesh( geometry, material );
+    this.scene.add(this.cube);
+
+
+    //main
+    var spriteMap = new THREE.TextureLoader().load( "/assets/main.png" );
+    var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+    this.hand = new THREE.Sprite( spriteMaterial );
+    this.hand.position.z = 3;
+    this.hand.position.y = 1;
+    this.hand.position.x = -1.4;
+    this.scene.add( this.hand );
+      
   }
 
   animate(): void {
@@ -108,11 +121,30 @@ export class EngineService implements OnDestroy {
         if (e.keyCode === 32) {
             this.gameService.toggleGameState();
         }
+        if (e.keyCode === 37) {
+          //left
+          if(this.hand.position.x - 1.15 > -1.5 ) {
+            this.hand.translateX(-1.15);
+          } else {
+            this.hand.position.x = 2.05;
+          }
+          
+        }
+        if (e.keyCode === 39) {
+          //right
+          if(this.hand.position.x + 1.15 < 2.10) {
+            this.hand.translateX(1.15);
+          } else {
+            this.hand.position.x = -1.4;
+          }
+          
+        }
       };
     });
   }
 
   render() {
+    // Where to update the things you know
     this.frameId = requestAnimationFrame(() => {
       this.render();
     });
