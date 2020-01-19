@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as THREE from 'three';
-import { Clock } from 'three';
-import { collectExternalReferences } from '@angular/compiler';
 import { DechetsService } from './dechets.service';
 
 @Injectable({
