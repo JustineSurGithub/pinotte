@@ -94,6 +94,7 @@ export class EngineService implements OnDestroy {
     this.hand = new THREE.Sprite( spriteMaterial );
     this.hand.position.z = 3;
     this.hand.position.y = 1;
+    this.hand.position.x = -1.4;
     this.scene.add( this.hand );
       
   }
@@ -122,11 +123,21 @@ export class EngineService implements OnDestroy {
         }
         if (e.keyCode === 37) {
           //left
-          this.hand.translateX(-0.3);
+          if(this.hand.position.x - 1.15 > -1.5 ) {
+            this.hand.translateX(-1.15);
+          } else {
+            this.hand.position.x = 2.05;
+          }
+          
         }
         if (e.keyCode === 39) {
           //right
-          this.hand.translateX(0.3);
+          if(this.hand.position.x + 1.15 < 2.10) {
+            this.hand.translateX(1.15);
+          } else {
+            this.hand.position.x = -1.4;
+          }
+          
         }
       };
     });
